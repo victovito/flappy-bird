@@ -1,0 +1,28 @@
+html, body {
+    margin: 0;
+    overflow: hidden;
+}
+
+#canvas {
+    position: absolute;
+    z-index: 0;
+    left: 0px;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+#ui {
+    font-family: Verdana, sans-serif;
+    z-index: 1;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 64px;
+}
+#ui>* {
+    z-index: inherit;
+}
