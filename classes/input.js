@@ -20,7 +20,6 @@ class Input {
             if (callback) {
                 callback();
             }
-            console.log(event.code);
         });
     }
 
