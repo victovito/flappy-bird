@@ -18,8 +18,10 @@ class UI {
         const template = this.templates[id];
         if (template) {
             let html = template;
-            for (let prop of Object.keys(props)) {
-                html = html.replace(`{{${prop}}}`, props[prop]);
+            if (props) {
+                for (let prop of Object.keys(props)) {
+                    html = html.replace(`{{${prop}}}`, props[prop]);
+                }
             }
             this.ui.innerHTML = html;
         }

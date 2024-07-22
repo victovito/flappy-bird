@@ -17,12 +17,18 @@ class Engine {
     /** @type {Game} */
     game;
     
+    timeStart = Date.now();
     lastFrame = Date.now();
     currentFrame = Date.now();
     
+    loading = true;
 
     get delta() {
         return (this.currentFrame - this.lastFrame) / 1000;
+    }
+
+    get time() {
+        return (this.currentFrame - this.timeStart) / 1000;
     }
 
     constructor() {
@@ -33,16 +39,28 @@ class Engine {
         this.game = new Game();
     }
 
+    async load() {
+        return new Promise((res, err) => {
+            setTimeout(res, 1000);
+        });
+    }
+
     start() {
+        this.loading = false;
         this.setupInputs();
         this.game.start();
     }
 
     update() {
-        this.game.update();
         this.renderer.initFrame();
-        this.game.pipes.forEach(pipe => this.renderer.drawPipe(pipe));
-        this.renderer.drawPlayer(this.game.player);
+        if (!this.loading) {
+            this.renderer.drawBackground();
+            this.game.update();
+            this.game.pipes.forEach(pipe => this.renderer.drawPipe(pipe));
+            this.renderer.drawPlayer(this.game.player);
+        } else {
+            this.renderer.loadingScreen();
+        }
 
         // let dist = Infinity;
         // this.game.pipes.forEach(pipe => {
@@ -55,7 +73,11 @@ class Engine {
     }
 
     setupInputs() {
-        this.input.addBind("Space", () => this.game.player.jump());
+        const jump = () => {
+            this.game.player.jump();
+            this.game.startPlaying();
+        }
+        this.input.addBind("Space", jump);
         this.input.addBind("KeyR", () => this.game.start());
     }
 

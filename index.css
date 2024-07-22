@@ -22,6 +22,7 @@ html, body {
     align-items: center;
     color: white;
     font-size: 64px;
+    text-align: center;
 }
 #ui>* {
     z-index: inherit;

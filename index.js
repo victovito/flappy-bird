@@ -3,7 +3,9 @@ import Engine from "./classes/engine.js";
 let engine = new Engine();
 
 function start() {
-    engine.start();
+    engine.load().then(res => {
+        engine.start();
+    });
     requestAnimationFrame(update);
 }
 

@@ -1,3 +1,4 @@
+import Engine from "./engine.js";
 import Game from "./game.js";
 import Pipe from "./pipe.js";
 import Player from "./player.js";
@@ -21,13 +22,16 @@ class Renderer {
     initFrame() {
         this.resize();
         this.ctx.clearRect(0, 0, this.width, this.height);
-        this.ctx.fillStyle = "#2a2a2a";
-        this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
     resize() {
         this.canvas.height = window.innerHeight;
         this.canvas.width = window.innerWidth;
+    }
+
+    drawBackground() {
+        this.ctx.fillStyle = "#2a2a2a";
+        this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
     /** @param {Player} player  */
@@ -71,6 +75,42 @@ class Renderer {
         this.ctx.beginPath()
         this.ctx.arc(position.x, position.y, radius, 0, 7);
         this.ctx.stroke();
+    }
+
+    loadingScreen() {
+        // background
+        this.ctx.fillStyle = "#000";
+        this.ctx.fillRect(0, 0, this.width, this.height);
+
+        // spinner
+        const sc = this.screenCenter;
+        const size = new Vector2(200, 25);
+        const speed = 50;
+        const offset = new Vector2((Engine.main.time * speed) % (size.y * 2), 0);
+        
+        // this.ctx.fillStyle = "#333";
+        // this.ctx.fillRect(sc.x - size.x / 2, sc.y - size.y / 2, size.x, size.y);
+
+        this.ctx.fillStyle = "#fff";
+
+        for (let i = 0; i < (size.x / size.y) + 1; i++) {
+            if (i % 2 == 0) {
+                const position = sc.sub(size.scale(0.5))
+                    .add(new Vector2(i * size.y, 0))
+                    .add(offset)
+                    .sub(new Vector2(size.y, 0));
+                
+                const startAdjust = Math.min(0, position.x - (sc.x - size.x / 2));
+                const endAdjust = Math.max(Math.min(0, (sc.x + size.x / 2) - (position.x + size.y)), -size.y);
+
+                this.ctx.fillRect(
+                    Math.min(Math.max(position.x, sc.x - size.x / 2), sc.x + size.x / 2),
+                    position.y,
+                    size.y + startAdjust + endAdjust,
+                    size.y
+                );
+            }
+        }
     }
 
     /** @param {Vector2} position  */

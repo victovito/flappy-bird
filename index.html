@@ -8,13 +8,21 @@
 <body>
     <canvas id="canvas"></canvas>
     <div id="ui">
+        <template id="start">
+            <div>
+                <h2>>:)</h2>
+                <h4>Space to jump</h4>
+            </div>
+        </template>
         <template id="playing">
             <h3>{{score}}</h3>
         </template>
-        <template id="gameover">""
-            <h2>GAME OVER</h2>
-            <h3>score: {{score}}</h3>
-            <h4>R to restart</h4>
+        <template id="gameover">
+            <div>
+                <h2>GAME OVER</h2>
+                <h3>score: {{score}}</h3>
+                <h4>R to restart</h4>
+            </div>
         </template>
     </div>
     <script src="index.js" type="module"></script>
