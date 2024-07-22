@@ -34,6 +34,14 @@ class Renderer {
         this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
+    drawLimits() {
+        const top = this.getScreenPosition(new Vector2(0, Game.playerHeightLimit));
+        const bottom = this.getScreenPosition(new Vector2(0, -Game.playerHeightLimit));
+        this.ctx.fillStyle = "#1a1a1a";
+        this.ctx.fillRect(0, top.y, this.width, -this.height);
+        this.ctx.fillRect(0, bottom.y, this.width, this.height);
+    }
+
     /** @param {Player} player  */
     drawPlayer(player) {
         const position = this.getScreenPosition(player.position);

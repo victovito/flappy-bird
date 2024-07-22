@@ -57,6 +57,7 @@ class Engine {
             this.renderer.drawBackground();
             this.game.update();
             this.game.pipes.forEach(pipe => this.renderer.drawPipe(pipe));
+            this.renderer.drawLimits();
             this.renderer.drawPlayer(this.game.player);
         } else {
             this.renderer.loadingScreen();
