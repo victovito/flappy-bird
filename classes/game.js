@@ -69,7 +69,7 @@ class Game {
         this.spawnPipeInterval = setInterval(() => {
             const pipe = new Pipe();
             this.pipes.push(pipe);
-        }, 1500);
+        }, 1500 / Engine.timeScale);
         this.showScore();
     }
 

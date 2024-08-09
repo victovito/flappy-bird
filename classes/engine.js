@@ -7,6 +7,7 @@ class Engine {
 
     /** @type {Engine} */
     static main;
+    static timeScale = 1;
     
     /** @type {Renderer} */
     renderer;
@@ -24,11 +25,11 @@ class Engine {
     loading = true;
 
     get delta() {
-        return (this.currentFrame - this.lastFrame) / 1000;
+        return (this.currentFrame - this.lastFrame) / 1000 * Engine.timeScale;
     }
 
     get time() {
-        return (this.currentFrame - this.timeStart) / 1000;
+        return (this.currentFrame - this.timeStart) / 1000 * Engine.timeScale;
     }
 
     constructor() {
