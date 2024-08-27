@@ -3,19 +3,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="index.css" rel="stylesheet">
-    <title>Flappy Bird</title>
+    <title>Flappy Kitty</title>
 </head>
 <body>
     <canvas id="canvas"></canvas>
     <div id="ui">
+        <template id="preload">
+            <button id="startbutton">start!</button>
+            <img id="point" src="assets/point.png">
+        </template>
         <template id="start">
-            <div>
-                <h2>>:)</h2>
-                <h4>Space to jump</h4>
+            <div class="start-screen">
+                <h2>>:3</h2>
+                <h4>Space to jump!</h4>
             </div>
         </template>
         <template id="playing">
-            <h3>{{score}}</h3>
+            <div class="playing-screen">
+                <h3>{{score}}</h3>
+            </div>
         </template>
         <template id="gameover">
             <div>

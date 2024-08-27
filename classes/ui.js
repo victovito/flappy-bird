@@ -16,6 +16,7 @@ class UI {
 
     showTemplate(id, props) {
         const template = this.templates[id];
+        const element = document.createElement("div");
         if (template) {
             let html = template;
             if (props) {
@@ -23,8 +24,10 @@ class UI {
                     html = html.replace(`{{${prop}}}`, props[prop]);
                 }
             }
-            this.ui.innerHTML = html;
+            element.innerHTML = html;
+            this.ui.replaceChildren(element);
         }
+        return element;
     }
 
 }

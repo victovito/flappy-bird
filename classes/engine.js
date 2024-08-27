@@ -1,3 +1,4 @@
+import AssetManager from "./assets.js";
 import Game from "./game.js";
 import Input from "./input.js";
 import Renderer from "./renderer.js";
@@ -11,6 +12,8 @@ class Engine {
     
     /** @type {Renderer} */
     renderer;
+    /** @type {AssetManager} */
+    assetManager;
     /** @type {UI} */
     ui;
     /** @type {Input} */
@@ -23,6 +26,7 @@ class Engine {
     currentFrame = Date.now();
     
     loading = true;
+    started = false;
 
     get delta() {
         return (this.currentFrame - this.lastFrame) / 1000 * Engine.timeScale;
@@ -35,33 +39,47 @@ class Engine {
     constructor() {
         Engine.main = this;
         this.renderer = new Renderer();
+        this.assetManager = new AssetManager();
         this.ui = new UI();
         this.input = new Input();
         this.game = new Game();
     }
 
     async load() {
-        return new Promise((res, err) => {
-            setTimeout(res, 1000);
-        });
+        await this.assetManager.loadAllAssets();
+        this.loading = false;
+    }
+
+    preloadScreen() {
+        const element = this.ui.showTemplate("preload");
+        /** @type {HTMLButtonElement} */
+        const button = element.querySelector("#startbutton");
+        button.onclick = () => this.start();
     }
 
     start() {
-        this.loading = false;
+        this.started = true;
         this.setupInputs();
         this.game.start();
+        const audio = Engine.main.assetManager.getAudio("lost");
+        audio.loop = true;
+        audio.volume = 0.5;
+        audio.play();
     }
 
     update() {
         this.renderer.initFrame();
-        if (!this.loading) {
+        if (this.loading) {
+            this.renderer.loadingScreen();
+        }
+        else if (!this.started) {
+            this.renderer.preloadBackground();
+        } else {
             this.renderer.drawBackground();
             this.game.update();
             this.game.pipes.forEach(pipe => this.renderer.drawPipe(pipe));
-            this.renderer.drawLimits();
             this.renderer.drawPlayer(this.game.player);
-        } else {
-            this.renderer.loadingScreen();
+            this.renderer.drawLimits();
         }
 
         // let dist = Infinity;

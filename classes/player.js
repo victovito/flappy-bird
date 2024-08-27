@@ -6,7 +6,7 @@ class Player {
 
     position = new Vector2();
     velocity = new Vector2();
-    size = 80;
+    size = 120;
 
     constructor() {}
 

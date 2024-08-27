@@ -4,7 +4,7 @@ let engine = new Engine();
 
 function start() {
     engine.load().then(res => {
-        engine.start();
+        engine.preloadScreen();
     });
     requestAnimationFrame(update);
 }

@@ -30,42 +30,89 @@ class Renderer {
     }
 
     drawBackground() {
-        this.ctx.fillStyle = "#2a2a2a";
-        this.ctx.fillRect(0, 0, this.width, this.height);
+        const sprite = Engine.main.assetManager.getImage("sky");
+
+        const top = this.getScreenPosition(new Vector2(0, Game.playerHeightLimit));
+        const bottom = this.getScreenPosition(new Vector2(0, -Game.playerHeightLimit));
+        const height = bottom.y - top.y;
+        const width = height * sprite.width / sprite.height;
+        const originX = (Engine.main.time / 10) % 1 * -width;
+        
+        this.ctx.imageSmoothingEnabled = false;
+        for (let x = originX; x < this.width; x += width) {
+            this.ctx.drawImage(
+                sprite,
+                x, top.y,
+                width + 1, height
+            );
+        }
     }
 
     drawLimits() {
+        const sprite_top = Engine.main.assetManager.getImage("leafs-top");
+        const sprite_bottom = Engine.main.assetManager.getImage("leafs");
         const top = this.getScreenPosition(new Vector2(0, Game.playerHeightLimit));
         const bottom = this.getScreenPosition(new Vector2(0, -Game.playerHeightLimit));
-        this.ctx.fillStyle = "#1a1a1a";
+        const originX = (Engine.main.time / 1.5) % 1 * (-sprite_top.width * 4);
+
+        this.ctx.fillStyle = "#000";
         this.ctx.fillRect(0, top.y, this.width, -this.height);
         this.ctx.fillRect(0, bottom.y, this.width, this.height);
+        
+        this.ctx.imageSmoothingEnabled = false;
+        for (let x = originX; x < this.width; x += sprite_top.width * 4) {
+            this.ctx.drawImage(
+                sprite_top,
+                x, top.y,
+                sprite_top.width * 4, sprite_top.height * 4
+            );
+            this.ctx.drawImage(
+                sprite_bottom,
+                x, bottom.y,
+                sprite_bottom.width * 4, -sprite_bottom.height * 4
+            );
+        }
     }
 
     /** @param {Player} player  */
     drawPlayer(player) {
-        const position = this.getScreenPosition(player.position);
-        const length = this.getScreenLength(player.size);
+        const sprite = Engine.main.assetManager.getImage("kitty");
+        const frames = 4;
+        const spriteSize = sprite.width / frames;
+        const key = Math.floor(Engine.main.time * 5) % frames;
+        const position = this.getScreenPosition(player.position.add(new Vector2(-4, 11)));
+        const length = this.getScreenLength(player.size * 1.3);
+        
+        // const oPosition = this.getScreenPosition(player.position);
+        // const oLength = this.getScreenLength(player.size);
+        // this.ctx.fillStyle = "#eeeeee";
+        // this.ctx.beginPath();
+        // this.ctx.arc(oPosition.x, oPosition.y, oLength / 2, 0, 7);
+        // this.ctx.fill();
 
-        this.ctx.fillStyle = "#eeeeee";
-
-        // this.ctx.fillRect(position.x - length / 2, position.y - length / 2, length, length);
-        this.ctx.beginPath();
-        this.ctx.arc(position.x, position.y, length / 2, 0, 7);
-        this.ctx.fill();
+        this.ctx.imageSmoothingEnabled = false;
+        this.ctx.drawImage(
+            sprite,
+            spriteSize * key, 0, spriteSize, spriteSize,
+            position.x - length / 2, position.y - length / 2, length, length
+        );
     }
     
     /** @param {Pipe} pipe  */
     drawPipe(pipe) {
+        const sprite_top = Engine.main.assetManager.getImage("pipe-top");
+        const sprite_bottom = Engine.main.assetManager.getImage("pipe-bottom");
+        
         const position = this.getScreenPosition(pipe.position);
         const width = this.getScreenLength(pipe.width);
         const gapPos = this.getScreenPosition(pipe.position.add(new Vector2(0, pipe.gapHeight)));
         const gapLen = this.getScreenLength(Game.pipeGapSize);
-        
-        this.ctx.fillStyle = "#555555";
-        
-        this.ctx.fillRect(position.x - width / 2, 0, width, gapPos.y - gapLen / 2);
-        this.ctx.fillRect(position.x - width / 2, this.height, width, -(this.height - (gapPos.y + gapLen / 2)));
+
+        const spriteHeight = width * sprite_top.height / sprite_top.width;
+
+        this.ctx.imageSmoothingEnabled = false;
+        this.ctx.drawImage(sprite_top, position.x - width / 2, gapPos.y - gapLen / 2, width, -spriteHeight);
+        this.ctx.drawImage(sprite_bottom, position.x - width / 2, gapPos.y + gapLen / 2, width, spriteHeight);
     }
     
     /** 
@@ -86,9 +133,7 @@ class Renderer {
     }
 
     loadingScreen() {
-        // background
-        this.ctx.fillStyle = "#000";
-        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.preloadBackground();
 
         // spinner
         const sc = this.screenCenter;
@@ -121,9 +166,19 @@ class Renderer {
         }
     }
 
+    preloadBackground() {
+        this.ctx.fillStyle = "#000";
+        this.ctx.fillRect(0, 0, this.width, this.height);
+    }
+
     /** @param {Vector2} position  */
     getScreenPosition(position) {
         return this.screenCenter.add(position.invertedY());
+    }
+
+    /** @param {Vector2} point  */
+    getWorldPosition(point) {
+        return point.sub(this.screenCenter).invertedY();
     }
 
     /** @param {number} length  */

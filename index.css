@@ -1,3 +1,24 @@
+@font-face {
+    font-family: retro-gaming;
+    src: url(assets/RetroGaming.ttf) format('truetype');
+}
+
+@keyframes updown {
+    0% {
+        transform: translateY(10px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
+
+* {
+    font-family: retro-gaming;
+}
+
 html, body {
     margin: 0;
     overflow: hidden;
@@ -13,9 +34,9 @@ html, body {
 }
 
 #ui {
-    font-family: Verdana, sans-serif;
     z-index: 1;
     width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,7 +44,42 @@ html, body {
     color: white;
     font-size: 64px;
     text-align: center;
+    text-shadow: 0px 1px 6px black;
 }
+
 #ui>* {
     z-index: inherit;
+}
+
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 20vh;
+}
+
+.playing-screen {
+    height: 90vh;
+}
+
+#startbutton {
+    background-color: transparent;
+    background-image: url(assets/button.png);
+    background-position: center;
+    background-size: cover;
+    image-rendering: pixelated;
+    outline: none;
+    border: none;
+    width: calc(96px * 3);
+    height: calc(32px * 3);
+    font-size: 46px;
+    cursor: pointer;
+}
+#point {
+    position: absolute;
+    height: calc(32px * 3);
+    image-rendering: pixelated;
+    left: calc(50% + 100px);
+    top: calc(50%);
+    pointer-events: none;
+    animation: updown 3s ease-in-out infinite;
 }

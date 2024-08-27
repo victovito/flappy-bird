@@ -10,7 +10,7 @@ class Game {
     static jumpVelocity = 900;
     static playerHeightLimit = 450;
 
-    static pipeGapSize = 300;
+    static pipeGapSize = 350;
     static pipeVelocity = new Vector2(-300, 0);
 
     static isGameOver = false;
@@ -42,14 +42,15 @@ class Game {
         if (Game.playing) {
             this.player.update();
             this.pipes = this.pipes.filter(pipe => pipe.position.x > -Pipe.spawnPosition);
+            this.pipes.forEach(pipe => pipe.update());
             if (!Game.isGameOver) {
                 this.pipes.forEach(pipe => {
-                    pipe.update();
                     if (!pipe.passed) {
                         if (pipe.position.x < -pipe.width / 2) {
                             pipe.passed = true;
                             this.score++;
                             this.showScore();
+                            this.scoreSound();
                         }
                     }
                     if (pipe.sdf(this.player.position) < this.player.size / 2) {
@@ -61,6 +62,23 @@ class Game {
                 }
             }
         }
+    }
+
+    scoreSound() {
+        const sounds = [
+            Engine.main.assetManager.getAudio("meow1"),
+            Engine.main.assetManager.getAudio("meow2"),
+            Engine.main.assetManager.getAudio("meow3"),
+            Engine.main.assetManager.getAudio("meow4"),
+            Engine.main.assetManager.getAudio("meow5"),
+            Engine.main.assetManager.getAudio("meow6"),
+            Engine.main.assetManager.getAudio("meow7"),
+        ];
+        sounds[Math.floor(Math.random() * sounds.length)].play();
+    }
+
+    dyingSound() {
+        Engine.main.assetManager.getAudio("dying").play();
     }
 
     startPlaying() {
@@ -75,8 +93,8 @@ class Game {
 
     gameOver() {
         Game.isGameOver = true;
+        this.dyingSound();
         Engine.main.ui.showTemplate("gameover", { score: this.score });
-        clearInterval(this.spawnPipeInterval);
     }
 
     showScore() {
