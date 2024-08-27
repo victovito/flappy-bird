@@ -75,6 +75,10 @@ class Game {
             Engine.main.assetManager.getAudio("meow7"),
         ];
         sounds[Math.floor(Math.random() * sounds.length)].play();
+
+        if (this.score != 0 && this.score % 10 == 0) {
+            Engine.main.assetManager.getAudio("purring").play();
+        }
     }
 
     dyingSound() {
