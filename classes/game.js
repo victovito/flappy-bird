@@ -11,10 +11,13 @@ class Game {
     static playerHeightLimit = 450;
 
     static pipeGapSize = 350;
+    static pipeVariance = 400;
     static pipeVelocity = new Vector2(-300, 0);
 
     static isGameOver = false;
     static playing = false;
+
+    static drawHitboxes = false;
 
     /** @type {number} */
     score;

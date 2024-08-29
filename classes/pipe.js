@@ -16,7 +16,7 @@ class Pipe {
 
     constructor() {
         this.position.x = Pipe.spawnPosition;
-        this.gapHeight = Math.random() * 400 - 200;
+        this.gapHeight = Math.random() * Game.pipeVariance - Game.pipeVariance / 2;
     }
 
     update() {

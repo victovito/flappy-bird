@@ -99,6 +99,7 @@ class Engine {
         }
         this.input.addBind("Space", jump);
         this.input.addBind("KeyR", () => this.game.start());
+        this.input.addBind("KeyH", () => Game.drawHitboxes = !Game.drawHitboxes);
     }
 
 }

@@ -83,19 +83,22 @@ class Renderer {
         const position = this.getScreenPosition(player.position.add(new Vector2(-4, 11)));
         const length = this.getScreenLength(player.size * 1.3);
         
-        // const oPosition = this.getScreenPosition(player.position);
-        // const oLength = this.getScreenLength(player.size);
-        // this.ctx.fillStyle = "#eeeeee";
-        // this.ctx.beginPath();
-        // this.ctx.arc(oPosition.x, oPosition.y, oLength / 2, 0, 7);
-        // this.ctx.fill();
-
         this.ctx.imageSmoothingEnabled = false;
         this.ctx.drawImage(
             sprite,
             spriteSize * key, 0, spriteSize, spriteSize,
             position.x - length / 2, position.y - length / 2, length, length
         );
+
+        if (Game.drawHitboxes) {
+            const oPosition = this.getScreenPosition(player.position);
+            const oLength = this.getScreenLength(player.size);
+            this.ctx.strokeStyle = "#f00";
+            this.ctx.lineWidth = 3;
+            this.ctx.beginPath();
+            this.ctx.arc(oPosition.x, oPosition.y, oLength / 2, 0, 7);
+            this.ctx.stroke();
+        }
     }
     
     /** @param {Pipe} pipe  */
@@ -113,6 +116,13 @@ class Renderer {
         this.ctx.imageSmoothingEnabled = false;
         this.ctx.drawImage(sprite_top, position.x - width / 2, gapPos.y - gapLen / 2, width, -spriteHeight);
         this.ctx.drawImage(sprite_bottom, position.x - width / 2, gapPos.y + gapLen / 2, width, spriteHeight);
+
+        if (Game.drawHitboxes) {
+            this.ctx.strokeStyle = "#f00";
+            this.ctx.lineWidth = 3;
+            this.ctx.strokeRect(position.x - width / 2, gapPos.y - gapLen / 2, width, -spriteHeight);
+            this.ctx.strokeRect(position.x - width / 2, gapPos.y + gapLen / 2, width, spriteHeight);
+        }
     }
     
     /** 
